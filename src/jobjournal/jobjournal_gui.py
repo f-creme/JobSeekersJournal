@@ -6,6 +6,7 @@ import streamlit as st
 
 from src.jobjournal.utils.pages.overview import overview
 from src.jobjournal.utils.pages.add_position import add_position
+from src.jobjournal.utils.pages.edit_application import edit_application
 
 class MultiPageApp:
     def __init__(self):
@@ -30,5 +31,6 @@ def main():
 
     app.add_page("Vue d'ensemble", overview)
     app.add_page("Ajouter une offre", add_position)
+    app.add_page("Editer une candidature", edit_application)
 
     app.run()
