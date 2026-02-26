@@ -3,6 +3,7 @@
 -- Table "positions"
 CREATE TABLE IF NOT EXISTS positions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    pub_date TEXT, 
     position TEXT NOT NULL,
     company TEXT NOT NULL,
     location TEXT,
