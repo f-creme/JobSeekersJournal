@@ -9,3 +9,7 @@ pdm.lock
 
 # === data ===
 *.db
+*.log
+
+# === other ===
+*.sh
