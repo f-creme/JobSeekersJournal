@@ -9,6 +9,7 @@ import json
 
 from src.jobjournal.utils.sql.queries import get_positions, get_application_by_id, edit_application_by_id
 from src.jobjournal.utils.sql.var import PositionsTable as pt
+from src.jobjournal.utils.templ.mappings import status_map, interest_map
 
 def edit_application():
     st.markdown("# Détailler ou modifier une candidature")
@@ -30,25 +31,6 @@ def edit_application():
         data = get_application_by_id(db_path=st.session_state.db_path, idx=selected_id)
 
         if data:
-            status_map = {
-                0: "A traiter",
-                1: "Candidature en préparation",
-                2: "Candidature prête pour envoie",
-                3: "Candaditure envoyée",
-                4: "Echanges en cours",
-                5: "Entretien à venir",
-                6: "Attente de décision recruteur",
-                7: "Attente de ma décision",
-                8: "Acceptée", 
-                9: "Refus recruteur",
-                10: "Refus personnel"
-            }
-
-            interest_map = {
-                0: "✩", 1: "⭐", 2: "⭐⭐", 3: "⭐⭐⭐", 4: "⭐⭐⭐⭐", 5: "⭐⭐⭐⭐⭐"
-            }
-
-
             position = st.text_input(label="Titre", value=data[pt.title])
             company = st.text_input(label="Entreprise", value=data[pt.comp])
             location = st.text_input(label="Localisation", value=data[pt.loc])

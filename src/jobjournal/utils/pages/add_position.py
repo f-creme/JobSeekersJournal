@@ -8,28 +8,11 @@ import json
 from datetime import date
 
 from src.jobjournal.utils.sql.queries import add_new_position
+from src.jobjournal.utils.templ.mappings import status_map, interest_map
 
 def add_position() -> None:
     st.markdown("# Ajouter une nouveau poste")
     st.markdown("---")
-
-    status_map = {
-        0: "A traiter",
-        1: "Candidature en préparation",
-        2: "Candidature prête pour envoie",
-        3: "Candaditure envoyée",
-        4: "Echanges en cours",
-        5: "Entretien à venir",
-        6: "Attente de décision recruteur",
-        7: "Attente de ma décision",
-        8: "Acceptée", 
-        9: "Refus recruteur",
-        10: "Refus personnel"
-    }
-
-    interest_map = {
-        0: "✩", 1: "⭐", 2: "⭐⭐", 3: "⭐⭐⭐", 4: "⭐⭐⭐⭐", 5: "⭐⭐⭐⭐⭐"
-    }
 
     cl, cr = st.columns(2)
     # column c1
