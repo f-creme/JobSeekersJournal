@@ -6,6 +6,28 @@ import streamlit as st
 from src.jobjournal.utils.sql.var import PositionsTable as pt
 from src.jobjournal.utils.sql.var import ContactsTable as ct
 
+class LoggingCursor:
+    def __init__(self, cursor):
+        self.__cursor = cursor
+    
+    def execute(self, query, params=None):
+        full_query = query
+        if params:
+            try:
+                full_query = query % tuple(map(repr, params))
+            except TypeError:
+                full_query = query + " | params=" + str(params)
+
+        logging.info(f"Executed query: {full_query}")
+        return self.__cursor.execute(query, params or ())
+    
+    def executemany(self, query, seq_of_params):
+        logging.info(f"Executed many: {query}, | params={seq_of_params}")
+        return self.__cursor.executemany(query, seq_of_params)
+    
+    def __getattr__(self, attr):
+        return getattr(self.__cursor, attr)
+
 def add_new_position(
         db_path: str,
         position: str, source: str, pub_date, status: int,
@@ -27,7 +49,7 @@ def add_new_position(
 
     try:
         cn = sqlite3.connect(db_path)
-        cs = cn.cursor()
+        cs = LoggingCursor(cn.cursor())
 
         query = f"INSERT INTO {pt.table_pos} ({cols_to_insert}) VALUES ({values_placehoder});"
         cs.execute(query, values)
@@ -38,13 +60,11 @@ def add_new_position(
         cs.close()
         cn.close()
 
-        logging.info(f"ID {last_id} inserted in {pt.table_pos}.")
-
         return True
     
     except Exception as e:
         print("An error occured while writing the database\n", e)
-        logging.error(f"An error occured while writing the database :\nQuery: {query}\nException: {e}")
+        logging.error(f"An error occured: {query} | params={str(values)}")
 
         return False
 
@@ -73,7 +93,7 @@ def get_positions(db_path: str) -> dict:
         return mapping
 
     except Exception as e:
-        logging.error(f"Unable to get requested data: \n\t{query} \n\t{e}")
+        logging.error(f"An error occured: {query}")
         return False
 
 def get_positions_summary(db_path: str) -> dict:
@@ -100,7 +120,7 @@ def get_positions_summary(db_path: str) -> dict:
         return mapping
 
     except Exception as e:
-        logging.error(f"Unable to get requested data: \n\t{query} \n\t{e}")
+        logging.error(f"An error occured: {query}")
         return False
 
 def get_application_by_id(db_path: str, idx: id) -> dict:
@@ -130,7 +150,7 @@ def get_application_by_id(db_path: str, idx: id) -> dict:
     
     except Exception as e:
         st.toast("❌ Récupération des données impossible.")
-        logging.error(f"Unable to get requested data: \n\tQuery: {query} \n\tValues: {value} \n\t{e}")
+        logging.error(f"An error occured: {query} | params={str(value)}")
         return  False
 
 def edit_application_by_id(
@@ -154,7 +174,7 @@ def edit_application_by_id(
 
     try:
         cn = sqlite3.connect(db_path)
-        cs = cn.cursor()
+        cs = LoggingCursor(cn.cursor())
 
         query = f"UPDATE {pt.table_pos} SET {cols_to_update} WHERE {pt.id} = ?;"
         cs.execute(query, values)
@@ -163,11 +183,10 @@ def edit_application_by_id(
         cs.close()
         cn.close()
 
-        logging.info(f"ID {idx} update in {pt.table_pos}.")
         return True
 
     except Exception as e:
-        logging.error(f"Unable to edit ID {idx} in {pt.table_pos}. \n\tQuery: {query} \n\tValues: {values}")
+        logging.error(f"An error occured: {query} | params={str(values)}")
         return False
     
 def update_application_timeline(db_path: str, idx: int, events) -> bool:
@@ -177,7 +196,7 @@ def update_application_timeline(db_path: str, idx: int, events) -> bool:
 
     try:
         cn = sqlite3.connect(db_path)
-        cs = cn.cursor()
+        cs = LoggingCursor(cn.cursor())
 
         query = f"UPDATE {pt.table_pos} SET {pt.timeline} = ? WHERE {pt.id} = ?;"
         values = (events, idx)
@@ -188,9 +207,8 @@ def update_application_timeline(db_path: str, idx: int, events) -> bool:
         cs.close()
         cn.close()
 
-        logging.info(f"ID {idx} update in {pt.table_pos} (field {pt.timeline}).")
         return True
     
     except Exception as e:
-        logging.error(f"Unable to edit ID {idx} in {pt.table_pos} (field {pt.timeline}). \n\tQuery: {query} \n\tValues: {values}")
+        logging.error(f"An error occured: {query} | params={str(values)}")
         return False
