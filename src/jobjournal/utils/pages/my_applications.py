@@ -180,7 +180,7 @@ def my_applications():
                 d = datetime.strptime(val["date"], "%Y-%m-%d")
                 events["events"].append({
                     "start_date": {"year": d.year, "month": d.month, "day": d.day},
-                    "text": {"headline": val["action"]}
+                    "text": {"headline": val["headline"], "text": val["text"]}
                 })
 
-            timeline(events, height=250)
+            timeline(events, height=350)

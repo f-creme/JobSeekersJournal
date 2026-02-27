@@ -55,13 +55,14 @@ def edit_application():
 
             old_tl = json.loads(data[pt.timeline])
             with st.expander("Timeline"):
-                cl2, cr2 = st.columns(2)
+                cl2, cr2, cr3 = st.columns(3)
                 events = {} 
                 for event_id in old_tl:
                     events[event_id] = {}
                     new_date = cl2.date_input(label=f"Date {int(event_id)+1}", value=old_tl[event_id]["date"])
                     events[event_id]["date"] = str(new_date)
-                    events[event_id]["action"] = cr2.text_input(label=f"Action {int(event_id)+1}", value=old_tl[event_id]["action"])
+                    events[event_id]["headline"] = cr2.text_input(label=f"Titre {int(event_id)+1}", value=old_tl[event_id]["headline"])
+                    events[event_id]["text"] = cr3.text_input(label=f"Texte {int(event_id)+1}", value=old_tl[event_id]["text"])
                 
             if st.button("Modifier les détails de la candidature", use_container_width=True, type="primary"):
                 skills_json = json.dumps(skills)
