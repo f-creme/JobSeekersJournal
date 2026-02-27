@@ -76,6 +76,33 @@ def get_positions(db_path: str) -> dict:
         logging.error(f"Unable to get requested data: \n\t{query} \n\t{e}")
         return False
 
+def get_positions_summary(db_path: str) -> dict:
+    """
+    Get basic information about all positions recorded in the database
+    """
+
+    try:
+        cn = sqlite3.connect(db_path)
+        cs = cn.cursor()
+
+        query = f"SELECT {pt.id}, {pt.comp}, {pt.title}, {pt.loc}, {pt.date}, {pt.interest}, {pt.status} FROM {pt.table_pos};" 
+        cs.execute(query)
+
+        data = cs.fetchall()
+        cols = [desc[0] for desc in cs.description]
+
+        cs.close()
+        cn.close()
+
+        df = pd.DataFrame(data=data, columns=cols)
+
+        mapping = df.set_index(pt.id, drop=True).to_dict("index")
+        return mapping
+
+    except Exception as e:
+        logging.error(f"Unable to get requested data: \n\t{query} \n\t{e}")
+        return False
+
 def get_application_by_id(db_path: str, idx: id) -> dict:
     """
     Get information about a specific application according to its id

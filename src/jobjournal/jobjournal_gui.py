@@ -5,6 +5,7 @@ warnings.simplefilter(action="ignore", category=FutureWarning)
 import streamlit as st
 
 from src.jobjournal.utils.pages.overview import overview
+from src.jobjournal.utils.pages.my_applications import my_applications
 from src.jobjournal.utils.pages.add_position import add_position
 from src.jobjournal.utils.pages.edit_application import edit_application
 
@@ -29,6 +30,7 @@ class MultiPageApp:
 def main():
     app = MultiPageApp()
 
+    app.add_page("Mes candidatures", my_applications)
     app.add_page("Vue d'ensemble", overview)
     app.add_page("Ajouter une offre", add_position)
     app.add_page("Editer une candidature", edit_application)
