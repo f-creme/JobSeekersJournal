@@ -212,3 +212,26 @@ def update_application_timeline(db_path: str, idx: int, events) -> bool:
     except Exception as e:
         logging.error(f"An error occured: {query} | params={str(values)}")
         return False
+    
+def delete_application(db_path: str, idx: int) -> bool:
+    """
+    Delete a job offer from the database according to its ID
+    """
+
+    try: 
+        cn = sqlite3.connect(db_path)
+        cs = LoggingCursor(cn.cursor())
+
+        query = f"DELETE FROM {pt.table_pos} WHERE {pt.id} = ?;"
+        values = (idx, )
+        cs.execute(query, values)
+
+        cn.commit()
+        cs.close()
+        cn.close()
+
+        return True
+    
+    except Exception as e:
+        logging.error(f"An error occured: {query} | params={str(values)}")
+        return False

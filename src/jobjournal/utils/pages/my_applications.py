@@ -17,7 +17,7 @@ from datetime import date, datetime
 
 today = date.today()
 
-from src.jobjournal.utils.sql.queries import get_positions, get_positions_summary, get_application_by_id, update_application_timeline
+from src.jobjournal.utils.sql.queries import get_positions, get_positions_summary, get_application_by_id, update_application_timeline, delete_application
 from src.jobjournal.utils.sql.var import PositionsTable as pt
 from src.jobjournal.utils.templ.mappings import interest_map, status_map, status_map_customization, map_days_left
 
@@ -155,6 +155,14 @@ def my_applications():
 
         c1.markdown(f"ℹ️ {data[pt.source]}")
         c2.markdown(f"💸 {data[pt.salary]} € bruts/an")
+
+        with st.expander("Supprimer l'offre de la base de données"):
+            if st.button("Confirmer la suppression", use_container_width=True, type="primary"):
+                success = delete_application(st.session_state.db_path, selected_id)
+                if success:
+                    st.success("✅ Candidature supprimée avec succès.")
+                else: 
+                    st.error("❌ Une erreur s'est produite de la suppression de la candidature.")
 
         tab1, tab2, tab3, tab4 = st.tabs(["Détails", "Motivations", "Compétences", "Timeline"])
         with tab1:
