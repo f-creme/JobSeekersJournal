@@ -5,14 +5,59 @@ import warnings
 warnings.simplefilter(action="ignore", category=FutureWarning)
 
 import streamlit as st
+import pandas as pd
+import json
+
+from typing import Literal
+import markdown
+
+from streamlit_timeline import timeline
 
 from datetime import date, datetime
 
 today = date.today()
 
-from src.jobjournal.utils.sql.queries import get_positions, get_positions_summary
+from src.jobjournal.utils.sql.queries import get_positions, get_positions_summary, get_application_by_id
 from src.jobjournal.utils.sql.var import PositionsTable as pt
 from src.jobjournal.utils.templ.mappings import interest_map, status_map, status_map_customization, map_days_left
+
+status_map_r = {k: v for v, k in status_map.items()}
+
+def static_table(
+    df: pd.DataFrame,
+    text_align: Literal["left", "center", "right"] = "center",
+    line_color: str = "rgba(150, 150, 150, 0.3)",
+) -> None:
+
+    # convertir markdown → HTML
+    df_html = df.copy()
+    for col in df_html.columns:
+        df_html[col] = df_html[col].apply(
+            lambda x: markdown.markdown(str(x)) if isinstance(x, str) else x
+        )
+
+    common_props = [
+        ("text-align", text_align),
+        ("border", f"1px solid {line_color}"),
+        ("padding", "0.25rem 0.375rem"),
+        ("vertical-align", "middle"),
+        ("line-height", "1.5rem"),
+    ]
+
+    html = (
+        df_html.style
+        .hide(axis="index")
+        .set_table_styles([
+            {"selector": "th", "props": common_props},
+            {"selector": "td", "props": common_props},
+        ])
+        .to_html(
+            escape=False,   # ← CRUCIAL
+            table_attributes='style="width:100%; border-collapse: collapse;"'
+        )
+    )
+
+    st.html(html)
 
 def my_applications():
     st.markdown("# Mes candidatures")
@@ -39,7 +84,6 @@ def my_applications():
             st.stop()
 
         # Add the numeric status to each element
-        status_map_r = {k: v for v, k in status_map.items()}
         for k in pos_summary:
             pos_summary[k]["status_num"] = status_map_r[pos_summary[k][pt.status]]
 
@@ -74,8 +118,69 @@ def my_applications():
             status_num = pos_summary[k]["status_num"]
 
             cl, cm, cr = st.columns(3)
-            cl.badge(f"{date_formatted} (il y a {diff_days} jours)", color=custom_days["color"], icon=custom_days["icon"])
-            cm.badge(status_str, color=status_map_customization[status_num]["color"], icon=status_map_customization[status_num]["icon"])
+            cm.badge(f"{date_formatted} (il y a {diff_days} jours)", color=custom_days["color"], icon=custom_days["icon"])
+            cl.badge(status_str, color=status_map_customization[status_num]["color"], icon=status_map_customization[status_num]["icon"])
             cr.markdown(interest_map[pos_summary[k][pt.interest]])
 
             st.markdown("---")
+
+    # Case 2: display all information for a specific offer
+    else:
+        selected_id = all_pos_dict_r[selected_pos]
+        data = get_application_by_id(db_path=st.session_state.db_path, idx=selected_id)
+
+        # Check if data have been found
+        if not data:
+            st.error("Une erreur s'est produite lors de la récupération des candidatures.")
+            st.stop()
+
+        # Process some data
+        status_str = data[pt.status]
+        status_num = status_map_r[status_str]
+
+        date_str = data[pt.date]
+        d = datetime.strptime(date_str, "%Y-%m-%d").date()
+        date_formatted = d.strftime("%d %b %Y")
+        diff_days = (today - d).days
+        custom_days = map_days_left(diff_days)
+
+        # Display
+        st.markdown(f"### {data[pt.title]}")
+        st.markdown(f"**{data[pt.comp]}** *({data[pt.loc]})*")
+
+        c1, c2, c3 = st.columns(3)
+        c1.badge(status_str, color=status_map_customization[status_num]["color"], icon=status_map_customization[status_num]["icon"], width="stretch")
+        c2.badge(f"{date_formatted} (il y a {diff_days} jours)", color=custom_days["color"], icon=custom_days["icon"])
+        c3.markdown(interest_map[data[pt.interest]])
+
+        c1.markdown(f"ℹ️ {data[pt.source]}")
+        c2.markdown(f"💸 {data[pt.salary]} € bruts/an")
+
+        tab1, tab2, tab3, tab4 = st.tabs(["Détails", "Motivations", "Compétences", "Timeline"])
+        with tab1:
+            st.markdown(f"{data[pt.details]}")
+
+        with tab2:
+            st.markdown(f"{data[pt.motivation]}")
+
+        with tab3:
+            st.markdown("Compétences clées en adéquation avec le poste :")
+            
+            skills = json.loads(data[pt.skills])
+            skills_df = pd.DataFrame.from_dict(skills, orient="index")
+            skills_df.columns = ["Compétence", "Démonstration"]
+
+            static_table(skills_df, "left")
+
+        with tab4:
+            tline = json.loads(data[pt.timeline])
+            events = {"events": []}
+
+            for key, val in tline.items():
+                d = datetime.strptime(val["date"], "%Y-%m-%d")
+                events["events"].append({
+                    "start_date": {"year": d.year, "month": d.month, "day": d.day},
+                    "text": {"headline": val["action"]}
+                })
+
+            timeline(events, height=250)
