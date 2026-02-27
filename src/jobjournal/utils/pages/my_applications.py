@@ -17,7 +17,7 @@ from datetime import date, datetime
 
 today = date.today()
 
-from src.jobjournal.utils.sql.queries import get_positions, get_positions_summary, get_application_by_id
+from src.jobjournal.utils.sql.queries import get_positions, get_positions_summary, get_application_by_id, update_application_timeline
 from src.jobjournal.utils.sql.var import PositionsTable as pt
 from src.jobjournal.utils.templ.mappings import interest_map, status_map, status_map_customization, map_days_left
 
@@ -184,3 +184,26 @@ def my_applications():
                 })
 
             timeline(events, height=350)
+
+            with st.expander("Ajouter un nouvel évènement dans la chronologie"):
+                new_tline = tline
+                next_event = str(len(tline))
+
+                new_date = st.date_input(label="Date de l'événènement")
+                new_headline = st.text_input(label="Titre")
+                new_text = st.text_area(label="Détails")
+
+                if st.button("Ajouter à la chronologie", use_container_width=True, type="primary"):
+                    new_tline[next_event] = {}
+                    new_tline[next_event]["date"] = new_date.strftime("%Y-%m-%d")
+                    new_tline[next_event]["headline"] = new_headline
+                    new_tline[next_event]["text"] = new_text
+
+                    new_tline_json = json.dumps(new_tline)
+
+                    success = update_application_timeline(st.session_state.db_path, selected_id, new_tline_json)
+
+                    if success:
+                        st.success("✅ Chronologie modifiée avec succès ! \n\nRechargez la page pour voir les modifications.")
+                    else: 
+                        st.error("❌ Une erreur s'est produite de la modification de la candidature.")

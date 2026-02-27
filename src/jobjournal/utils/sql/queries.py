@@ -169,3 +169,28 @@ def edit_application_by_id(
     except Exception as e:
         logging.error(f"Unable to edit ID {idx} in {pt.table_pos}. \n\tQuery: {query} \n\tValues: {values}")
         return False
+    
+def update_application_timeline(db_path: str, idx: int, events) -> bool:
+    """
+    Update the timeline field of a selected application with its ID
+    """
+
+    try:
+        cn = sqlite3.connect(db_path)
+        cs = cn.cursor()
+
+        query = f"UPDATE {pt.table_pos} SET {pt.timeline} = ? WHERE {pt.id} = ?;"
+        values = (events, idx)
+
+        cs.execute(query, values)
+
+        cn.commit()
+        cs.close()
+        cn.close()
+
+        logging.info(f"ID {idx} update in {pt.table_pos} (field {pt.timeline}).")
+        return True
+    
+    except Exception as e:
+        logging.error(f"Unable to edit ID {idx} in {pt.table_pos} (field {pt.timeline}). \n\tQuery: {query} \n\tValues: {values}")
+        return False
