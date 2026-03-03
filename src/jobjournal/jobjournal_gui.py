@@ -30,8 +30,8 @@ class MultiPageApp:
 def main():
     app = MultiPageApp()
 
-    app.add_page("Mes candidatures", my_applications)
     app.add_page("Vue d'ensemble", overview)
+    app.add_page("Mes candidatures", my_applications)
     app.add_page("Ajouter une offre", add_position)
     app.add_page("Editer une candidature", edit_application)
 
