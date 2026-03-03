@@ -193,12 +193,31 @@ def my_applications():
 
             timeline(events, height=350)
 
+            # Add new event to the timeline
             with st.expander("Ajouter un nouvel évènement dans la chronologie"):
                 new_tline = tline
                 next_event = str(len(tline))
 
+                st.info(
+                    "💡 Saisissez le titre de l'évènement ou choisissez l'un des évènement de la liste ci dessous pour " \
+                    "profiter de statistiques avancées dans l'onglet **Vue d'ensemble**."
+                )
+
                 new_date = st.date_input(label="Date de l'événènement")
-                new_headline = st.text_input(label="Titre")
+
+                # Auto-fill event's headline
+                if not "new_headline_value" in st.session_state:
+                    st.session_state["new_headline_value"] = ""
+
+                c1, c2, c3 = st.columns(3)
+                columns = [c1, c2, c3]
+                for i, (key, status) in enumerate(status_map.items()):
+                    col_num = i % 3
+                    with columns[col_num]:
+                        if st.button(label=f"{status_map_customization[key]["icon"]} {status}", use_container_width=True):
+                            st.session_state.new_headline_value = status
+
+                new_headline = st.text_input(label="Titre", value=st.session_state.new_headline_value)
                 new_text = st.text_area(label="Détails")
 
                 if st.button("Ajouter à la chronologie", use_container_width=True, type="primary"):
@@ -209,9 +228,12 @@ def my_applications():
 
                     new_tline_json = json.dumps(new_tline)
 
-                    success = update_application_timeline(st.session_state.db_path, selected_id, new_tline_json)
+                    success = update_application_timeline(st.session_state.db_path, selected_id, new_tline_json, new_tline[next_event]["headline"])
 
                     if success:
                         st.success("✅ Chronologie modifiée avec succès ! \n\nRechargez la page pour voir les modifications.")
                     else: 
                         st.error("❌ Une erreur s'est produite de la modification de la candidature.")
+
+                    # Reset auto-fill 
+                    st.session_state.new_headline_value = ""

@@ -6,6 +6,10 @@ import streamlit as st
 from src.jobjournal.utils.sql.var import PositionsTable as pt
 from src.jobjournal.utils.sql.var import ContactsTable as ct
 
+from src.jobjournal.utils.templ.mappings import status_map
+
+status_map_r = {k: v for v, k in status_map.items()}
+
 class LoggingCursor:
     def __init__(self, cursor):
         self.__cursor = cursor
@@ -189,19 +193,27 @@ def edit_application_by_id(
         logging.error(f"An error occured: {query} | params={str(values)}")
         return False
     
-def update_application_timeline(db_path: str, idx: int, events) -> bool:
+def update_application_timeline(db_path: str, idx: int, events, last_headline: str) -> bool:
     """
-    Update the timeline field of a selected application with its ID
+    Update the timeline field of a selected application with its ID. 
+    Check if the newest element of the timeline corresponds to a status change accordingly
     """
 
     try:
         cn = sqlite3.connect(db_path)
         cs = LoggingCursor(cn.cursor())
 
+        # Update the timeline
         query = f"UPDATE {pt.table_pos} SET {pt.timeline} = ? WHERE {pt.id} = ?;"
         values = (events, idx)
 
         cs.execute(query, values)
+
+        # Check if the status needs to be changed
+        if last_headline in status_map_r:
+            query = f"UPDATE {pt.table_pos} SET {pt.status} = ? WHERE {pt.id} = ?;"
+            values = (last_headline, idx)
+            cs.execute(query, values)
 
         cn.commit()
         cs.close()
