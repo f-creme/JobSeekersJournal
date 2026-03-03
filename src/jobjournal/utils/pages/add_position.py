@@ -48,7 +48,8 @@ def add_position() -> None:
         interest_num = next((k for k, v in interest_map.items() if v==interest), None)
 
         tl = {}
-        tl["0"] = {"date": date.today().isoformat(), "headline": "Nouvelle offre", "text": "L'offre a été ajoutée à la base de données."}
+        tl["0"] = {"date": pub_date.isoformat(), "headline": "Publication", "text": "Publication de l'offre en ligne."}
+        tl["1"] = {"date": date.today().isoformat(), "headline": "Enregistrement", "text": "Enregistrement de l'offre dans la base de données."}
         tl_json = json.dumps(tl)
 
         skills_json = json.dumps(skills)
