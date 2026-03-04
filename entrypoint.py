@@ -59,5 +59,24 @@ if __name__=="__main__":
 
             st.stop()
 
+    # Check if nominatim user agent variable is defined
+    if "NOMINATIM_USER_AGENT" in os.environ:
+        st.session_state.nominatim = os.environ["NOMINATIM_USER_AGENT"]
+    else:
+        st.markdown("# Job Seeker's Journal")
+        st.error("⚠️ La variable d'environnement NOMINATIM_USER_AGENT n'existe pas.")
+        st.markdown(
+            "Pour utiliser l'application, définir l'emplacement de la base de données " \
+            "dans la variable d'environnement NOMINATIM_USER_AGENT, puis relancer l'application."
+        )
+
+        st.code(
+            '$ export NOMINATIM_USER_AGENT="jsj/0.1 (+your-email@domain.com)"\n' \
+            "$ pdm run streamlit run entrypoint.py", 
+            language="bash"
+        )
+
+        st.stop()
+        
     # Run app
     main()
