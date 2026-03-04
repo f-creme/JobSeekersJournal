@@ -25,3 +25,20 @@ CREATE TABLE IF NOT EXISTS contacts(
     mail TEXT,
     phone TEXT
 );
+
+-- Table "places"
+CREATE TABLE IF NOT EXISTS places(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    place TEXT NOT NULL,
+    lat REAL,
+    long REAL
+);
+
+-- Join table "position_places"
+CREATE TABLE IF NOT EXISTS position_places(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    position INTEGER,
+    place INTEGER,
+    FOREIGN KEY (position) REFERENCES positions(id),
+    FOREIGN KEY (place) REFERENCES places(id)
+);
