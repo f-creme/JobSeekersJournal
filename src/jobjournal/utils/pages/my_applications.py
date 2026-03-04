@@ -60,8 +60,6 @@ def static_table(
     st.html(html)
 
 def my_applications():
-    st.markdown("# Mes candidatures")
-    st.markdown("---")
 
     all_pos_dict = get_positions(st.session_state.db_path)
 
@@ -77,6 +75,9 @@ def my_applications():
     
     # Case 1: display a summary of all recorded applications
     if selected_pos == "Toutes":
+        st.markdown("# Mes candidatures")
+        st.space("small")
+
         pos_summary = get_positions_summary(st.session_state.db_path)
 
         if not pos_summary: # Check the result of the query
@@ -105,24 +106,23 @@ def my_applications():
             
         # Display
         for k in sorted_pos_summary:
-            st.markdown(f"### {pos_summary[k][pt.title]}")
-            st.markdown(f"**{pos_summary[k][pt.comp]}** *({pos_summary[k][pt.loc]})*")
+            with st.container(border=True, key=f"container_{k}"):
+                st.markdown(f"### {pos_summary[k][pt.title]}")
+                st.markdown(f"**{pos_summary[k][pt.comp]}** *({pos_summary[k][pt.loc]})*")
 
-            date_str = pos_summary[k][pt.date]
-            d = datetime.strptime(date_str, "%Y-%m-%d").date()
-            date_formatted = d.strftime("%d %b %Y")
-            diff_days = (today - d).days
-            custom_days = map_days_left(diff_days)
+                date_str = pos_summary[k][pt.date]
+                d = datetime.strptime(date_str, "%Y-%m-%d").date()
+                date_formatted = d.strftime("%d %b %Y")
+                diff_days = (today - d).days
+                custom_days = map_days_left(diff_days)
 
-            status_str = pos_summary[k][pt.status]
-            status_num = pos_summary[k]["status_num"]
+                status_str = pos_summary[k][pt.status]
+                status_num = pos_summary[k]["status_num"]
 
-            cl, cm, cr = st.columns(3)
-            cm.badge(f"{date_formatted} (il y a {diff_days} jours)", color=custom_days["color"], icon=custom_days["icon"])
-            cl.badge(status_str, color=status_map_customization[status_num]["color"], icon=status_map_customization[status_num]["icon"])
-            cr.markdown(interest_map[pos_summary[k][pt.interest]])
-
-            st.markdown("---")
+                cl, cm, cr = st.columns(3)
+                cm.badge(f"{date_formatted} (il y a {diff_days} jours)", color=custom_days["color"], icon=custom_days["icon"])
+                cl.badge(status_str, color=status_map_customization[status_num]["color"], icon=status_map_customization[status_num]["icon"])
+                cr.markdown(interest_map[pos_summary[k][pt.interest]])
 
     # Case 2: display all information for a specific offer
     else:
@@ -145,7 +145,7 @@ def my_applications():
         custom_days = map_days_left(diff_days)
 
         # Display
-        st.markdown(f"### {data[pt.title]}")
+        st.markdown(f"## {data[pt.title]}")
         st.markdown(f"**{data[pt.comp]}** *({data[pt.loc]})*")
 
         c1, c2, c3 = st.columns(3)
