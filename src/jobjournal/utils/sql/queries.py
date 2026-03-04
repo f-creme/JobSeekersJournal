@@ -1,10 +1,17 @@
 import sqlite3 
 import logging
+import json
 import pandas as pd
 import streamlit as st
 
+from datetime import date, datetime, timedelta
+
+today = date.today()
+
 from src.jobjournal.utils.sql.var import PositionsTable as pt
 from src.jobjournal.utils.sql.var import ContactsTable as ct
+
+from src.jobjournal.utils.sql.data_process_func import *
 
 from src.jobjournal.utils.templ.mappings import status_map
 
@@ -246,4 +253,42 @@ def delete_application(db_path: str, idx: int) -> bool:
     
     except Exception as e:
         logging.error(f"An error occured: {query} | params={str(values)}")
+        return False 
+
+def applications_stats_overview(db_path: str) -> dict:
+    """
+    """
+
+    try:
+        cn = sqlite3.connect(db_path)
+        cs = cn.cursor()
+
+        query = f"SELECT {pt.timeline}, {pt.status} FROM {pt.table_pos};"
+        cs.execute(query)
+        
+        data = cs.fetchall()
+
+        cs.close()
+        cn.close()
+    
+    except Exception as e:
+        logging.error(f"An error occured: {query}")
         return False
+    
+    # Process data
+    df = pd.DataFrame(data, columns=["timeline", "status_str"])
+    df["application_sent"] = df["status_str"].apply(lambda x: status_map_r[x] >= 3)
+    df["record_week"] = df["timeline"].apply(extract_record_week_category)
+    df["application_week"] = df["timeline"].apply(extract_application_week_category)
+
+    processed_data = {
+        "overall_records": len(data),
+        "current_week_records": int(df["record_week"].value_counts()["current"]),
+        "last_week_records": int(df["record_week"].value_counts()["last_week"]),
+        "overall_app": int(df["application_sent"].value_counts()[True]),
+        "current_week_app": int(df["application_week"].value_counts()["current"]),
+        "last_week_app": int(df["application_week"].value_counts()["last_week"]),
+        "status_distribution": df["status_str"].value_counts().to_dict()        
+    }
+
+    return processed_data
