@@ -2,7 +2,7 @@ status_map = {
     0: "A traiter",
     1: "Candidature en préparation",
     2: "Candidature prête pour envoie",
-    3: "Candaditure envoyée",
+    3: "Candidature envoyée",
     4: "Echanges en cours",
     5: "Entretien à venir",
     6: "Attente de décision recruteur",

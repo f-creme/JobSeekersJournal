@@ -11,7 +11,7 @@ from src.jobjournal.utils.sql.queries import add_new_position
 from src.jobjournal.utils.templ.mappings import status_map, interest_map
 
 def add_position() -> None:
-    st.markdown("# Ajouter une nouveau poste")
+    st.markdown("# Ajouter une nouvelle offre d'emploi")
     st.markdown("---")
 
     cl, cr = st.columns(2)

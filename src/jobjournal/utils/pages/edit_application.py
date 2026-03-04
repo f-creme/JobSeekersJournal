@@ -12,7 +12,7 @@ from src.jobjournal.utils.sql.var import PositionsTable as pt
 from src.jobjournal.utils.templ.mappings import status_map, interest_map
 
 def edit_application():
-    st.markdown("# Détailler ou modifier une candidature")
+    st.markdown("# Mettre à jour une candidature")
     st.markdown("---")
 
     all_positions_dict = get_positions(db_path=st.session_state.db_path)

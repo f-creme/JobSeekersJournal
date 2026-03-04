@@ -17,7 +17,7 @@ class MultiPageApp:
         self.pages.append({"title": title, "function": func})
 
     def run(self):
-        st.set_page_config(page_title="Job Seeker's Journal", layout="wide")
+        st.set_page_config(page_title="Job Seeker's Journal", layout="wide", page_icon="💼")
 
         st.sidebar.markdown("## Menu Principal")
         page = st.sidebar.selectbox(
@@ -32,7 +32,7 @@ def main():
 
     app.add_page("Vue d'ensemble", overview)
     app.add_page("Mes candidatures", my_applications)
-    app.add_page("Ajouter une offre", add_position)
-    app.add_page("Editer une candidature", edit_application)
+    app.add_page("Ajouter une offre d'emploi", add_position)
+    app.add_page("Mettre à jour une candidature", edit_application)
 
     app.run()
