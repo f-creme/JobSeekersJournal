@@ -13,3 +13,4 @@ pdm.lock
 
 # === other ===
 *.sh
+replacements.txt
