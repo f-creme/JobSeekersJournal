@@ -46,6 +46,7 @@ def add_position() -> None:
     if st.button("Ajouter à la base de données", type="primary", use_container_width=True):
 
         interest_num = next((k for k, v in interest_map.items() if v==interest), None)
+        status_num = next((k for k, v in status_map.items() if v==status), None)
 
         tl = {}
         tl["0"] = {"date": pub_date.isoformat(), "headline": "Publication", "text": "Publication de l'offre en ligne."}
@@ -56,7 +57,7 @@ def add_position() -> None:
 
         success = add_new_position(
             db_path=st.session_state.db_path, 
-            position=position, source=source, pub_date=pub_date, status=status, 
+            position=position, source=source, pub_date=pub_date, status=status_num, 
             company=company, location=location, salary=salary, interest=interest_num,
             details=details, motivations=motivations, skills=skills_json, timeline=tl_json     
         )

@@ -38,7 +38,7 @@ def edit_application():
             pub_date = st.date_input(label="Date de publication", value=data[pt.date])
             salary = st.number_input(label="Salaire (€ bruts annuel)", value=data[pt.salary], step=10.0, min_value=0.0)
 
-            status = st.selectbox(label="Statut", options=[data[pt.status]] + [status_map[k] for k in status_map])
+            status = st.selectbox(label="Statut", options=[status_map[data[pt.status]]] + [status_map[k] for k in status_map])
             interest = st.selectbox(label="Intérêt", options=[interest_map[data[pt.interest]]] + [interest_map[k] for k in interest_map])
                 
             details = st.text_area(label="Détails", value=data[pt.details])
@@ -67,11 +67,12 @@ def edit_application():
             if st.button("Modifier les détails de la candidature", use_container_width=True, type="primary"):
                 skills_json = json.dumps(skills)
                 events_json = json.dumps(events)
+                status_num = next((k for k, v in status_map.items() if v==status), None)
                 interest_num = next((k for k, v in interest_map.items() if v==interest), None)
 
                 success = edit_application_by_id(
                     db_path=st.session_state.db_path, idx=selected_id, 
-                    position=position, source=source, pub_date=pub_date, status=status, 
+                    position=position, source=source, pub_date=pub_date, status=status_num, 
                     company=company, location=location, salary=salary, interest=interest_num,
                     details=details, motivations=motivations, skills=skills_json, timeline=events_json     
                 )
