@@ -25,3 +25,19 @@ class ContactsTable:
     comp = "company"
     mail = "mail"
     phone = "phone"
+
+class PlacesTable:
+    table_places = "places"
+
+    id = "id"
+    place = "place"
+    lat = "lat"
+    lon = "long"
+
+class JoinTable1:
+    # Join table between positions and places
+    join_pos_places = "position_places"
+
+    id = "id"
+    pos = "position"
+    place = "place"
