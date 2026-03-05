@@ -8,7 +8,7 @@ from datetime import date, datetime, timedelta
 
 today = date.today()
 
-from src.jobjournal.utils.sql.var import PositionsTable as pt
+from src.jobjournal.utils.sql.var import (PositionsTable as pt, PlacesTable as placest, JoinTable1 as j1)
 from src.jobjournal.utils.sql.var import ContactsTable as ct
 
 from src.jobjournal.utils.sql.data_process_func import *
@@ -38,6 +38,89 @@ class LoggingCursor:
     
     def __getattr__(self, attr):
         return getattr(self.__cursor, attr)
+
+def get_locations(db_path: str, force_update: bool = False) -> dict:
+    if not "locations" in st.session_state or force_update==True:
+        with sqlite3.connect(db_path) as cn:
+            cs = cn.cursor()
+            cs.execute("SELECT * FROM places;")
+
+            data = cs.fetchall()
+            cols = [d[0] for d in cs.description]
+            df = pd.DataFrame(data, columns=cols).set_index(placest.place)
+
+        return df.to_dict("index")
+    else:
+        return st.session_state.locations
+
+def record_location(db_path: str, location: str, idx: int):
+    # Process location string
+    location_list = extract_places(location)
+
+    # Get recorded locations
+    st.session_state.locations = get_locations(db_path)
+
+    # Find places to add to the places table
+    places_not_in_db = [loc for loc in location_list if loc not in st.session_state.locations]
+
+    # Add new places in the places table, with associated coordinates
+    places_coord = []
+    for place in places_not_in_db:
+        res = find_place_coordinates(place)
+        if res:
+            places_coord.append((place, res[0], res[1]))
+
+    print("begin : ", st.session_state.locations, "\n")
+    if len(places_coord) > 0:
+        with sqlite3.connect(db_path) as cn:
+            cs = LoggingCursor(cn.cursor())
+            
+            try: 
+                query = f"INSERT INTO {placest.table_places} ({placest.place}, {placest.lat}, {placest.lon}) VALUES (?, ?, ?);"
+                cs.executemany(query, places_coord)
+
+            except:
+                logging.error(f"An error occured: {query} | params={str(places_coord)}")
+                return False
+            
+        # Update st.session_state.locations to have updated (place, id) couples
+        st.session_state.locations = get_locations(db_path, force_update=True)
+
+        print("updated :", st.session_state.locations, "\n")
+
+    # Update join table
+    values_join_table = []
+    for place in location_list:
+        if place in st.session_state.locations:
+            values_join_table.append((st.session_state.locations[place][placest.id], idx))
+
+    print("values to add in join table :", values_join_table, "\n")
+
+    if len(values_join_table) > 0:
+        with sqlite3.connect(db_path) as cn:
+            try:
+                cs = LoggingCursor(cn.cursor())
+
+                # Delete all entries with selected position's id
+                cs.execute(f"DELETE FROM {j1.join_pos_places} WHERE {j1.pos} = ?;", (idx, ))
+
+                # Insert new entries
+                cs.executemany(
+                    f"INSERT INTO {j1.join_pos_places} ({j1.place}, {j1.pos}) VALUES (?, ?);",
+                    values_join_table
+                )
+
+                cn.commit()
+
+                return True
+
+            except: 
+                cn.rollback()
+                logging.error(f"An error occured while updating position-places join table with {j1.pos} = {idx}")
+                return False
+
+    return True
+
 
 def add_new_position(
         db_path: str,
