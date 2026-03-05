@@ -48,6 +48,6 @@ def overview() -> None:
             title_x=0.25,
             coloraxis_showscale=False
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     return None
