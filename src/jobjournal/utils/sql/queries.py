@@ -339,6 +339,9 @@ def delete_application(db_path: str, idx: int) -> bool:
         values = (idx, )
         cs.execute(query, values)
 
+        query = f"DELETE FROM {j1._NAME} WHERE {j1.pos} = ?"
+        cs.execute(query, values)
+
         cn.commit()
         cs.close()
         cn.close()
