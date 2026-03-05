@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS positions (
     location TEXT,
     source TEXT,
     hype INTEGER NOT NULL CHECK (hype >= 0 AND hype <= 5),
-    status TEXT,
+    status INTEGER,
     salary REAL,
     details TEXT,
     skills TEXT NOT NULL CHECK (json_valid(skills)),
