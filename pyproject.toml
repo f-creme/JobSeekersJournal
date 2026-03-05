@@ -5,11 +5,16 @@ description = "Default template for PDM package"
 authors = [
     {name = "Florentin Creme", email = "contact.fcreme@gmail.com"},
 ]
-dependencies = ["streamlit>=1.54.0", "streamlit-timeline>=0.0.2", "markdown>=3.10.2", "plotly>=6.6.0", "geopy>=2.4.1"]
+dependencies = ["streamlit>=1.54.0", "streamlit-timeline>=0.0.2", "markdown>=3.10.2", "plotly>=6.6.0", "geopy>=2.4.1", "streamlit-folium>=0.26.2"]
 requires-python = "==3.12.*"
 readme = "README.md"
 license = {text = "MIT"}
 
 
+[project.optional-dependencies]
+test = [
+    "python-dotenv>=1.2.2",
+    "pytest>=9.0.2",
+]
 [tool.pdm]
 distribution = false

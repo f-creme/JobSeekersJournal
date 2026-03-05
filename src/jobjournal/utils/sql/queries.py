@@ -1,6 +1,8 @@
 import sqlite3 
 import logging
-import json
+import random
+
+import numpy as np
 import pandas as pd
 import streamlit as st
 
@@ -383,3 +385,30 @@ def applications_stats_overview(db_path: str) -> dict:
     }
 
     return processed_data
+
+def applications_places_overview(db_path: str) -> dict:
+
+    with sqlite3.connect(db_path) as cn:
+
+        query = "SELECT " \
+        f"t1.{pt.title}, t1.{pt.comp}, t1.{pt.status}, {pt.loc}, {pt.interest}, " \
+        f"t2.{placest.place}, t2.{placest.lat}, t2.{placest.lon} " \
+        f"FROM {j1._NAME} AS t " \
+        f"LEFT JOIN {pt._NAME} AS t1 ON t1.{pt.id} = t.{j1.pos} " \
+        f"LEFT JOIN {placest._NAME} AS t2 ON t2.{placest.id} = t.{j1.place};"
+
+        try:
+            cs = cn.cursor()
+            cs.execute(query)
+
+            data = cs.fetchall()
+            cols = [c[0] for c in cs.description]
+            data_df = pd.DataFrame(data, columns=cols)
+
+            cs.close()
+
+        except Exception as e:
+            logging.error(f"An error occured: {query}")
+            return False
+        
+        return data_df.to_dict("index")
