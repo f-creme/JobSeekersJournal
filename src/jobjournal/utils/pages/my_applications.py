@@ -89,12 +89,14 @@ def my_applications():
             pos_summary[k]["status_str"] = status_map[pos_summary[k][pt.status]]
 
         # Sort
-        sort_field = st.sidebar.selectbox(label="Trier par", options=["ID", "Date de publication", "Statut", "Intérêt"])
-        asc_or_desc = st.sidebar.radio(label="Ascendant ou Descendant", options=["Ascendant", "Descendant"])
-        if asc_or_desc == "Ascendant":
-            rev = False
-        else:
-            rev = True
+        sort_field = st.sidebar.selectbox(label="Trier par", options=["Défaut", "Date de publication", "Statut", "Intérêt"])
+
+        if sort_field != "Défaut":
+            asc_or_desc = st.sidebar.radio(label="Ascendant ou Descendant", options=["Ascendant", "Descendant"])
+            if asc_or_desc == "Ascendant":
+                rev = False
+            else:
+                rev = True
 
         sorted_pos_summary = pos_summary
         if sort_field == "Date de publication":
