@@ -95,15 +95,16 @@ def overview() -> None:
                     selected_key = int(st_map["last_object_clicked_popup"].strip())
                     selected_data = map_data[selected_key]
 
-                    status = selected_data[PositionsTable.status]
-                    color, icon = status_map_customization[status_map_r[status]]["color"], status_map_customization[status_map_r[status]]["icon"]
+                    status_num = selected_data[PositionsTable.status]
+                    status_str = status_map[status_num]
+                    color, icon = status_map_customization[status_num]["color"], status_map_customization[status_num]["icon"]
 
                     st.markdown("#### Job sélectionné")
                     st.markdown(f"* **Poste**: {selected_data[PositionsTable.title]}")                    
                     st.markdown(f"* **Entreprise**: {selected_data[PositionsTable.comp]}")
                     st.markdown(f"* **Lieu**: {selected_data[PositionsTable.loc]}")
                     st.markdown(
-                        f":{color}-badge[{icon} {status}] :yellow-badge[{interest_map[selected_data[PositionsTable.interest]]}]"
+                        f":{color}-badge[{icon} {status_str}] :yellow-badge[{interest_map[selected_data[PositionsTable.interest]]}]"
                     )                 
 
     if not map_data and not data:
