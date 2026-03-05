@@ -106,4 +106,10 @@ def overview() -> None:
                         f":{color}-badge[{icon} {status}] :yellow-badge[{interest_map[selected_data[PositionsTable.interest]]}]"
                     )                 
 
+    if not map_data and not data:
+        st.info(
+            "Aucune candidature n'est enregistrée dans la base de données. " \
+            "Enregistrez une première candidature sur la page **Ajouter une offre**."
+        )
+
     return None

@@ -369,6 +369,9 @@ def applications_stats_overview(db_path: str) -> dict:
         return False
     
     # Process data
+    if not data:
+        return False
+    
     df = pd.DataFrame(data, columns=["timeline", "status_str"])
     df["application_sent"] = df["status_str"].apply(lambda x: status_map_r[x] >= 3)
     df["record_week"] = df["timeline"].apply(extract_record_week_category)
