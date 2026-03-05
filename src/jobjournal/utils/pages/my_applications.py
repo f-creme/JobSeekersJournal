@@ -100,7 +100,7 @@ def my_applications():
         if sort_field == "Date de publication":
             sorted_pos_summary = dict(sorted(pos_summary.items(), key=lambda item: item[1][pt.date], reverse=rev))
         if sort_field == "Statut":
-            sorted_pos_summary = dict(sorted(pos_summary.items(), key=lambda item: item[1]["status_num"], reverse=rev))
+            sorted_pos_summary = dict(sorted(pos_summary.items(), key=lambda item: item[1][pt.status], reverse=rev))
         if sort_field == "Intérêt":
             sorted_pos_summary = dict(sorted(pos_summary.items(), key=lambda item: item[1][pt.interest], reverse=rev))
             
