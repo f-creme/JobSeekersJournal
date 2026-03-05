@@ -46,14 +46,15 @@ def overview() -> None:
         fig = px.bar(
             status_d_df.sort_values("num_status", ascending=True), x="status", y="count", color="num_status",
             labels={"status": "Statut de candidature", "count": "Nombre de candidatures", "num_status": "Avancement"},
-            title="Répartition des candidatures par statut",
             color_continuous_scale="Tealgrn"
         )
         fig.update_layout(
-            title_x=0.25,
             coloraxis_showscale=False
         )
-        st.plotly_chart(fig, width="stretch")
+
+        st.markdown("### Répartition des candidatures par statut")
+        with st.container(border=True):
+            st.plotly_chart(fig, width="stretch")
 
     map_data = applications_places_overview(db_path=st.session_state.db_path)
 
