@@ -70,7 +70,7 @@ def record_location(db_path: str, location: str, idx: int):
         if res:
             places_coord.append((place, res[0], res[1]))
 
-    print("begin : ", st.session_state.locations, "\n")
+    # print("begin : ", st.session_state.locations, "\n")
     if len(places_coord) > 0:
         with sqlite3.connect(db_path) as cn:
             cs = LoggingCursor(cn.cursor())
@@ -86,7 +86,7 @@ def record_location(db_path: str, location: str, idx: int):
         # Update st.session_state.locations to have updated (place, id) couples
         st.session_state.locations = get_locations(db_path, force_update=True)
 
-        print("updated :", st.session_state.locations, "\n")
+        # print("updated :", st.session_state.locations, "\n")
 
     # Update join table
     values_join_table = []
@@ -94,7 +94,7 @@ def record_location(db_path: str, location: str, idx: int):
         if place in st.session_state.locations:
             values_join_table.append((st.session_state.locations[place][placest.id], idx))
 
-    print("values to add in join table :", values_join_table, "\n")
+    # print("values to add in join table :", values_join_table, "\n")
 
     if len(values_join_table) > 0:
         with sqlite3.connect(db_path) as cn:
@@ -153,13 +153,17 @@ def add_new_position(
         cn.commit()
         cs.close()
         cn.close()
-
-        return True
     
     except Exception as e:
         print("An error occured while writing the database\n", e)
         logging.error(f"An error occured: {query} | params={str(values)}")
 
+        return False
+    
+    loc_recorded = record_location(db_path=db_path, location=location, idx=last_id)
+    if loc_recorded:
+        return True
+    else:
         return False
 
 def get_positions(db_path: str) -> dict:
@@ -277,11 +281,16 @@ def edit_application_by_id(
         cs.close()
         cn.close()
 
-        return True
-
     except Exception as e:
         logging.error(f"An error occured: {query} | params={str(values)}")
         return False
+    
+    loc_record = record_location(db_path=db_path, location=location, idx=idx)
+
+    if not loc_record:
+        return False
+
+    return True
     
 def update_application_timeline(db_path: str, idx: int, events, last_headline: str) -> bool:
     """
