@@ -5,7 +5,7 @@ description = "Default template for PDM package"
 authors = [
     {name = "Florentin Creme", email = "contact.fcreme@gmail.com"},
 ]
-dependencies = ["streamlit>=1.54.0", "streamlit-timeline>=0.0.2", "markdown>=3.10.2", "plotly>=6.6.0"]
+dependencies = ["streamlit>=1.54.0", "streamlit-timeline>=0.0.2", "markdown>=3.10.2", "plotly>=6.6.0", "geopy>=2.4.1"]
 requires-python = "==3.12.*"
 readme = "README.md"
 license = {text = "MIT"}
