@@ -373,18 +373,47 @@ def applications_stats_overview(db_path: str) -> dict:
     if not data:
         return False
     
-    df = pd.DataFrame(data, columns=["timeline", "status_str"])
-    df["application_sent"] = df["status_str"].apply(lambda x: status_map_r[x] >= 3)
+    df = pd.DataFrame(data, columns=["timeline", "status_num"])
+    df["status_str"] = df["status_num"].apply(lambda x: status_map[x])
+    df["application_sent"] = df["status_num"].apply(lambda x: x >= 3)
     df["record_week"] = df["timeline"].apply(extract_record_week_category)
     df["application_week"] = df["timeline"].apply(extract_application_week_category)
 
+    record_week_value_counts = df["record_week"].value_counts()
+    if "current" in record_week_value_counts:
+        current_week_records = int(record_week_value_counts["current"])
+    else:
+        current_week_records = 0
+
+    if "last_week" in record_week_value_counts:
+        last_week_records = int(record_week_value_counts["last_week"])
+    else:
+        last_week_records = 0
+
+    application_sent_value_counts = df["application_sent"].value_counts()
+    if True in application_sent_value_counts:
+        overall_app = int(application_sent_value_counts[True])
+    else:
+        overall_app = 0
+
+    application_week_value_counts = df["application_week"].value_counts()
+    if "current" in application_week_value_counts:
+        current_week_app = int(application_week_value_counts["current"])
+    else:
+        current_week_app = 0
+
+    if "last_week" in application_week_value_counts:
+        last_week_app = int(application_week_value_counts["last_week"])
+    else:
+        last_week_app = 0
+
     processed_data = {
         "overall_records": len(data),
-        "current_week_records": int(df["record_week"].value_counts()["current"]),
-        "last_week_records": int(df["record_week"].value_counts()["last_week"]),
-        "overall_app": int(df["application_sent"].value_counts()[True]),
-        "current_week_app": int(df["application_week"].value_counts()["current"]),
-        "last_week_app": int(df["application_week"].value_counts()["last_week"]),
+        "current_week_records": current_week_records,
+        "last_week_records": last_week_records,
+        "overall_app": overall_app,
+        "current_week_app": current_week_app,
+        "last_week_app": last_week_app,
         "status_distribution": df["status_str"].value_counts().to_dict()        
     }
 
