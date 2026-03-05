@@ -76,7 +76,7 @@ def record_location(db_path: str, location: str, idx: int):
             cs = LoggingCursor(cn.cursor())
             
             try: 
-                query = f"INSERT INTO {placest.table_places} ({placest.place}, {placest.lat}, {placest.lon}) VALUES (?, ?, ?);"
+                query = f"INSERT INTO {placest._NAME} ({placest.place}, {placest.lat}, {placest.lon}) VALUES (?, ?, ?);"
                 cs.executemany(query, places_coord)
 
             except:
@@ -102,11 +102,11 @@ def record_location(db_path: str, location: str, idx: int):
                 cs = LoggingCursor(cn.cursor())
 
                 # Delete all entries with selected position's id
-                cs.execute(f"DELETE FROM {j1.join_pos_places} WHERE {j1.pos} = ?;", (idx, ))
+                cs.execute(f"DELETE FROM {j1._NAME} WHERE {j1.pos} = ?;", (idx, ))
 
                 # Insert new entries
                 cs.executemany(
-                    f"INSERT INTO {j1.join_pos_places} ({j1.place}, {j1.pos}) VALUES (?, ?);",
+                    f"INSERT INTO {j1._NAME} ({j1.place}, {j1.pos}) VALUES (?, ?);",
                     values_join_table
                 )
 
@@ -120,7 +120,6 @@ def record_location(db_path: str, location: str, idx: int):
                 return False
 
     return True
-
 
 def add_new_position(
         db_path: str,
@@ -145,7 +144,7 @@ def add_new_position(
         cn = sqlite3.connect(db_path)
         cs = LoggingCursor(cn.cursor())
 
-        query = f"INSERT INTO {pt.table_pos} ({cols_to_insert}) VALUES ({values_placehoder});"
+        query = f"INSERT INTO {pt._NAME} ({cols_to_insert}) VALUES ({values_placehoder});"
         cs.execute(query, values)
         
         last_id = cs.lastrowid
@@ -175,7 +174,7 @@ def get_positions(db_path: str) -> dict:
         cn = sqlite3.connect(db_path)
         cs = cn.cursor()
 
-        query = f"SELECT {pt.id}, {pt.comp}, {pt.title} FROM {pt.table_pos};" 
+        query = f"SELECT {pt.id}, {pt.comp}, {pt.title} FROM {pt._NAME};" 
         cs.execute(query)
 
         data = cs.fetchall()
@@ -203,7 +202,7 @@ def get_positions_summary(db_path: str) -> dict:
         cn = sqlite3.connect(db_path)
         cs = cn.cursor()
 
-        query = f"SELECT {pt.id}, {pt.comp}, {pt.title}, {pt.loc}, {pt.date}, {pt.interest}, {pt.status} FROM {pt.table_pos};" 
+        query = f"SELECT {pt.id}, {pt.comp}, {pt.title}, {pt.loc}, {pt.date}, {pt.interest}, {pt.status} FROM {pt._NAME};" 
         cs.execute(query)
 
         data = cs.fetchall()
@@ -230,7 +229,7 @@ def get_application_by_id(db_path: str, idx: id) -> dict:
         cn = sqlite3.connect(db_path)
         cs = cn.cursor()
 
-        query = f"SELECT * FROM {pt.table_pos} WHERE {pt.id} = ?;"
+        query = f"SELECT * FROM {pt._NAME} WHERE {pt.id} = ?;"
         value = (idx, )
 
         cs.execute(query, value)
@@ -274,7 +273,7 @@ def edit_application_by_id(
         cn = sqlite3.connect(db_path)
         cs = LoggingCursor(cn.cursor())
 
-        query = f"UPDATE {pt.table_pos} SET {cols_to_update} WHERE {pt.id} = ?;"
+        query = f"UPDATE {pt._NAME} SET {cols_to_update} WHERE {pt.id} = ?;"
         cs.execute(query, values)
 
         cn.commit()
@@ -303,14 +302,14 @@ def update_application_timeline(db_path: str, idx: int, events, last_headline: s
         cs = LoggingCursor(cn.cursor())
 
         # Update the timeline
-        query = f"UPDATE {pt.table_pos} SET {pt.timeline} = ? WHERE {pt.id} = ?;"
+        query = f"UPDATE {pt._NAME} SET {pt.timeline} = ? WHERE {pt.id} = ?;"
         values = (events, idx)
 
         cs.execute(query, values)
 
         # Check if the status needs to be changed
         if last_headline in status_map_r:
-            query = f"UPDATE {pt.table_pos} SET {pt.status} = ? WHERE {pt.id} = ?;"
+            query = f"UPDATE {pt._NAME} SET {pt.status} = ? WHERE {pt.id} = ?;"
             values = (last_headline, idx)
             cs.execute(query, values)
 
@@ -333,7 +332,7 @@ def delete_application(db_path: str, idx: int) -> bool:
         cn = sqlite3.connect(db_path)
         cs = LoggingCursor(cn.cursor())
 
-        query = f"DELETE FROM {pt.table_pos} WHERE {pt.id} = ?;"
+        query = f"DELETE FROM {pt._NAME} WHERE {pt.id} = ?;"
         values = (idx, )
         cs.execute(query, values)
 
@@ -355,7 +354,7 @@ def applications_stats_overview(db_path: str) -> dict:
         cn = sqlite3.connect(db_path)
         cs = cn.cursor()
 
-        query = f"SELECT {pt.timeline}, {pt.status} FROM {pt.table_pos};"
+        query = f"SELECT {pt.timeline}, {pt.status} FROM {pt._NAME};"
         cs.execute(query)
         
         data = cs.fetchall()

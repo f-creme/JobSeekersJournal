@@ -1,6 +1,6 @@
 class PositionsTable:
     # Define database variables' name for positions table
-    table_pos ="positions"
+    _NAME ="positions"
     
     id = "id"
     date = "pub_date"
@@ -18,7 +18,7 @@ class PositionsTable:
 
 class ContactsTable:
     # Define database variables' name for contacts table
-    table_con = "contacts"
+    _NAME = "contacts"
     
     id = "id"
     name = "name"
@@ -27,7 +27,7 @@ class ContactsTable:
     phone = "phone"
 
 class PlacesTable:
-    table_places = "places"
+    _NAME = "places"
 
     id = "id"
     place = "place"
@@ -36,7 +36,7 @@ class PlacesTable:
 
 class JoinTable1:
     # Join table between positions and places
-    join_pos_places = "position_places"
+    _NAME = "position_places"
 
     id = "id"
     pos = "position"
