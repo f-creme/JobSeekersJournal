@@ -86,7 +86,7 @@ def my_applications():
 
         # Add the numeric status to each element
         for k in pos_summary:
-            pos_summary[k]["status_num"] = status_map_r[pos_summary[k][pt.status]]
+            pos_summary[k]["status_str"] = status_map[pos_summary[k][pt.status]]
 
         # Sort
         sort_field = st.sidebar.selectbox(label="Trier par", options=["ID", "Date de publication", "Statut", "Intérêt"])
@@ -116,8 +116,8 @@ def my_applications():
                 diff_days = (today - d).days
                 custom_days = map_days_left(diff_days)
 
-                status_str = pos_summary[k][pt.status]
-                status_num = pos_summary[k]["status_num"]
+                status_str = pos_summary[k]["status_str"]
+                status_num = pos_summary[k][pt.status]
 
                 cl, cm, cr = st.columns(3)
                 cm.badge(f"{date_formatted} (il y a {diff_days} jours)", color=custom_days["color"], icon=custom_days["icon"])
@@ -135,8 +135,8 @@ def my_applications():
             st.stop()
 
         # Process some data
-        status_str = data[pt.status]
-        status_num = status_map_r[status_str]
+        status_num = data[pt.status]
+        status_str = status_map[status_num]
 
         date_str = data[pt.date]
         d = datetime.strptime(date_str, "%Y-%m-%d").date()

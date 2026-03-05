@@ -311,8 +311,9 @@ def update_application_timeline(db_path: str, idx: int, events, last_headline: s
 
         # Check if the status needs to be changed
         if last_headline in status_map_r:
+            new_status = status_map_r[last_headline]
             query = f"UPDATE {pt._NAME} SET {pt.status} = ? WHERE {pt.id} = ?;"
-            values = (last_headline, idx)
+            values = (new_status, idx)
             cs.execute(query, values)
 
         cn.commit()
