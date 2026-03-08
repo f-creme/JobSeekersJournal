@@ -1,16 +1,12 @@
-# === pdm ===
+# === pdm/uv ===
 .py[cod]
 __pycache__/
 .mypy_cache/
 .pytest_cache/
 .ruff_cache/
 .pdm-python
-pdm.lock
+*.lock
 
 # === data ===
 *.db
 *.log
-
-# === other ===
-*.sh
-replacements.txt
