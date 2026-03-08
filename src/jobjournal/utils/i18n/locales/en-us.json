@@ -1,0 +1,17 @@
+{
+    "app": {
+        "title": "# Job Seeker's Journal (en)"
+    },
+
+    "nav": {
+        "title": "## Main Menu",
+        "page-selector": "Select a page",
+
+        "pages": {
+            "overview": "Overview", 
+            "applications": "Ma applications",
+            "add_position": "Add a job offer",
+            "update_position": "Update a job offer"
+        }
+    }
+}

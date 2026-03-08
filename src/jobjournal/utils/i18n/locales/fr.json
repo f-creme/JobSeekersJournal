@@ -1,0 +1,17 @@
+{
+    "app": {
+        "title": "# Job Seeker's Journal (fr)"
+    },
+
+    "nav": {
+        "title": "## Menu Principal",
+        "page-selector": "Sélectionner une page",
+
+        "pages": {
+            "overview": "Vue d'ensemble", 
+            "applications": "Mes candidatures",
+            "add_position": "Ajouter une offre d'emploi",
+            "update_position": "Modifier une offre d'emploi"
+        }
+    }
+}
