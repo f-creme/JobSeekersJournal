@@ -13,5 +13,230 @@
             "add_position": "Ajouter une offre d'emploi",
             "update_position": "Modifier une offre d'emploi"
         }
+    },
+
+    "filter": {
+        "offer-selector": {
+            "label": "Sélectionner une offre",
+            "all-option": "Toutes"
+        },
+        "offers-sorter": {
+            "label": "Options de tri", 
+            "options": {
+                "default": "Tri par défaut",
+                "pub-date": "Date de publication",
+                "status": "Statut de la candidature",
+                "interest": "Intérêt" 
+            }
+        },
+        "sorting-options": {
+            "label": "Ascendant ou descendant",
+            "asc": "Ascendant", 
+            "desc": "Descendant"
+        }
+    },
+
+    "form": {
+        "fields": {
+            "position": {
+                "title": {
+                    "label": "Titre du poste"
+                },
+                "company": {
+                    "label": "Entreprise"
+                },
+                "source": {
+                    "label": "Source"
+                },
+                "location": {
+                    "label": "Localisation",
+                    "help": "Lieu ou sites multiples séparés par des virgules\n\n**Exemple**: `Paris`, `Paris (FR), Bruxelles (BE)`, `Londond, Heidelberg`"
+                },
+                "pub-date": {
+                    "label": "Date de publication"
+                },
+                "salary": {
+                    "label": "Salaire brut annuel (€)", 
+                    "help": "Si le salaire n'est pas connu, laisser 0 ou renseigner le salaire attendu."
+                }, 
+                "status": {
+                    "label": "Statut",
+                    "help": "Sélectionner un état d'avancement de la candidature parmi ceux proposés"
+                },
+                "interest": {
+                    "label": "Intérêt",
+                    "help": "Évaluer l'intérêt porté à cette offre entre 0 et 5"
+                },
+                "details": {
+                    "label": "Détails",
+                    "help": "Renseigner ici toutes les informations relatives à l'offre.\n\nCe champ supporte la syntaxe [Markdown](https://www.markdownguide.org/basic-syntax)"
+                },
+                "motivations": {
+                    "label": "Motivations",
+                    "help": "Renseigner ici toutes les motivations vis-à-vis de ce poste.\n\nCe champ supporte la syntaxe [Markdown](https://www.markdownguide.org/basic-syntax)"
+                },
+                "skills": {
+                    "skill-label": "Compétence n°",
+                    "proof-label": "Commentaire n°"
+                }
+            }
+        },
+
+        "expander": {
+            "skills": {
+                "label": "Compétences clés pour le poste",
+                "caption": "Lister ici jusqu'à 5 compétences clés pour le poste en indiquant, pour chacune si elle est ✅ maîtrisée ou ❌ non, et en indiquant une ou plusieurs expériences pour en attester.",
+                "info": "Ces champs supportent la syntaxe [Markdown](https://www.markdownguide.org/basic-syntax)"
+            },
+            "timeline": {
+                "label": "Chronologie associée à l'offre",
+                "caption": "Modifier ici la chronologie de la candidature",
+                "info":"💡​ Les champs `Détails` supportent la syntaxe [Markdown](https://www.markdownguide.org/basic-syntax)",
+                "warning": "⚠️ Prière de ne pas modifier les titre des évènements n°1 et 2, sous peine de statistiques faussées dans l'onglet **Vue d'ensemble**.",
+                "field": {
+                    "date": "Date de l'évènement n°",
+                    "title": "Titre de l'évènement n°",
+                    "content": "Détails de l'évènement n°"
+                }
+            }
+        },
+
+        "button": {
+            "add-position": {
+                "label": "Ajouter l'offre à la base de données"
+            },
+            "update-position": {
+                "label": "Modifier les détails d'une offre"
+            }
+        }
+    },
+
+    "page": {
+
+        "overview": {
+            "title": "Vue d'ensemble",
+            "caption": "Suivez l'avancée de votre recherche d'emploi.",
+            "metrics": {
+                "total-records": "Offres enregistrées",
+                "total-applications": "Candidatures envoyées",
+                "weekly-records": {
+                    "title": "Offres enregistrées cette semaine",
+                    "caption": "par rapport à la semaine dernière"
+                },
+                "weekly-applications": {
+                    "title": "Candidatures envoyées cette semaine",
+                    "caption": "par rapport à la semaine dernière"
+                }
+            },
+            "status-graph": {
+                "title": "Répartition des candidatures par statut",
+                "ylabel": "Nombre de candidatures", 
+                "xlabel": "Statut des candidatures",
+                "hue": "Statut numérique"
+            }, 
+            "map": {
+                "title": "Répartition géographique des candidatures",
+                "info": {
+                    "caption": "Poste sélectionné", 
+                    "job": "Poste",
+                    "company": "Entreprise", 
+                    "location": "Lieu"
+                }
+            }
+        },
+
+        "applications": {
+            "title": "Mes candidatures",
+            "summary": {
+                "date1": "il y a ",
+                "date2": "jours",
+                "salary-unit": "€ bruts/an"
+            },
+            "deletion": {
+                "expander": "Supprimer l'offre de la base de données", 
+                "confirm": "Confirmer la suppression"
+            },
+            "tabs": {
+                "details": {
+                    "title": "Détails de l'offre"
+                },
+                "motivations": {
+                    "title": "Motivations pour ce poste"
+                },
+                "skills": {
+                    "title": "Compétences ciblées",
+                    "caption": "Compétences clés requises pour le poste",
+                    "table": {
+                        "skill": "Compétence",
+                        "experience": "Expérience associée"
+                    }
+                },
+                "timeline": {
+                    "title": "Chronologie",
+                    "expander": {
+                        "label": "Ajouter un évènement à la timeline",
+                        "info": "💡 Saisissez le titre de l'évènement ou choisissez l'un des évènement de la liste ci dessous pour profiter de statistiques avancées dans l'onglet **Vue d'ensemble**.",
+                        "fields": {
+                            "date": "Date de l'évènement",
+                            "name": "Nom de l'évènement",
+                            "details": "Détails"
+                        },
+                        "button": {
+                            "label": "Ajouter à la chronologie"
+                        }
+                    }
+                }
+            }
+        },
+
+        "new-position": {
+            "title": "Ajouter une offre d'emploi"
+        },
+
+        "update-position": {
+            "title": "Modifier une offre d'emploi"
+        }
+    }, 
+
+    "data": {
+        "status": {
+            "-2": "Publication",
+            "-1": "Enregistrement", 
+            "0": "À traiter", 
+            "1": "Candidature en préparation",
+            "2": "Candidature prête pour l'envoi",
+            "3": "Candidature envoyée", 
+            "4": "Échanges en cours", 
+            "5": "Entretien à venir", 
+            "6": "Attente de décision recruteur", 
+            "7": "Réflexion personnelle en cours",
+            "8": "Offre acceptée", 
+            "9": "Refus du recruteur", 
+            "10": "Refus personnel"
+        }
+    }, 
+
+    "error": {
+        "missing-applications-data": "Une erreur s'est produite lors de la récupération des candidatures.",
+        "empty-database": "Aucune candidature n'est enregistrée dans la base de données.\n\nEnregistrez une première candidature sur la page **Ajouter une offre**."
+    }, 
+
+    "message": {
+        "new-position": {
+            "success": "✅ Offre ajoutée à la base de donnée !",
+            "failure": "❌ Une erreur s'est produite lors de l'ajout de l'offre à la base de données."
+        },
+        "update-position": {
+            "success": "✅ Détails de l'offre modifiés dans la base de donnée !",
+            "failure": "❌ Une erreur s'est produite lors de la modification de l'offre dans la base de données."
+        },
+        "offer-deletion": {
+            "success": "✅ Candidature supprimée avec succès.",
+            "failure": "❌ Une erreur s'est produite de la suppression de la candidature."
+        },
+        "timeline-update": {
+            "success": "✅ Chronologie modifiée avec succès !\n\nRechargez la page pour voir les modifications.", 
+            "failure":"❌ Une erreur s'est produite de la modification de la candidature."
+        }
     }
 }
