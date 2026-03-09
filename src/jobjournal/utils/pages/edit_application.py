@@ -14,7 +14,7 @@ from src.jobjournal.utils.sql.var import PositionsTable as pt
 from src.jobjournal.utils.templ.mappings import status_map, interest_map, pre_application_status_map
 
 def edit_application():
-    st.markdown(f"# {t('page.update-poistion.title')}")
+    st.markdown(f"# {t('page.update-position.title')}")
     st.markdown("---")
 
     all_positions_dict = get_positions(db_path=st.session_state.db_path)
