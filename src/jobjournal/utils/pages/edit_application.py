@@ -62,8 +62,8 @@ def edit_application():
                 skills = {}
                 for skill_id in range(5):
                     skills[skill_id] = {}
-                    skills[skill_id]["skill"] = cl1.text_area(label=f"{t('form.expander.skills.skill-label')}{skill_id+1}", value=old_skills[str(skill_id)]["skill"])
-                    skills[skill_id]["proof"] = cr1.text_area(label=f"{t('form.expander.skills.proof-label')}{skill_id+1}", value=old_skills[str(skill_id)]["proof"])
+                    skills[skill_id]["skill"] = cl1.text_area(label=f"{t('form.fields.position.skills.skill-label')}{skill_id+1}", value=old_skills[str(skill_id)]["skill"])
+                    skills[skill_id]["proof"] = cr1.text_area(label=f"{t('form.fields.position.skills.proof-label')}{skill_id+1}", value=old_skills[str(skill_id)]["proof"])
 
             old_tl = json.loads(data[pt.timeline])
             with st.expander(t('form.expander.timeline.label')):
