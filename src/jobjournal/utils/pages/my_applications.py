@@ -239,7 +239,10 @@ def my_applications():
                 if st.button(t("page.applications.tabs.timeline.expander.button.label"), use_container_width=True, type="primary"):
                     new_tline[next_event] = {}
                     new_tline[next_event]["date"] = new_date.strftime("%Y-%m-%d")
-                    new_tline[next_event]["headline"] = new_headline
+                    if new_headline == t(st.session_state.new_headline_value):
+                        new_tline[next_event]["headline"] = st.session_state.new_headline_value
+                    else:
+                        new_tline[next_event]["headline"] = new_headline
                     new_tline[next_event]["text"] = new_text
 
                     new_tline_json = json.dumps(new_tline)

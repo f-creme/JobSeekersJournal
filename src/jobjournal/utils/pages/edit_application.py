@@ -78,13 +78,15 @@ def edit_application():
                     events[event_id] = {}
                     new_date = cl2.date_input(label=f"{t('form.expander.timeline.field.date')}{int(event_id)+1}", value=old_tl[event_id]["date"])
                     events[event_id]["date"] = str(new_date)
-                    events[event_id]["headline"] = cr2.text_input(label=f"Titre {int(event_id)+1}", value=old_tl[event_id]["headline"])
-                    events[event_id]["text"] = cr3.text_input(label=f"Texte {int(event_id)+1}", value=old_tl[event_id]["text"])
+                    _locale_headline = cr2.text_input(label=f"{t('form.expander.timeline.field.title')}{int(event_id)+1}", value=t(old_tl[event_id]["headline"]))
+                    _locale_headline = next((status_map[k] for k, v in _local_status_map.items() if v==_locale_headline), _locale_headline)
+                    events[event_id]["headline"] = next((pre_application_status_map[k] for k, v in _local_pre_application_status_map.items() if v==_locale_headline), _locale_headline)
+                    events[event_id]["text"] = cr3.text_input(label=f"{t('form.expander.timeline.field.content')}{int(event_id)+1}", value=old_tl[event_id]["text"])
                 
             if st.button(t("form.button.update-position.label"), use_container_width=True, type="primary"):
                 skills_json = json.dumps(skills)
                 events_json = json.dumps(events)
-                status_num = next((k for k, v in status_map.items() if v==status), None)
+                status_num = next((k for k, v in _local_status_map.items() if v==status), None)
                 interest_num = next((k for k, v in interest_map.items() if v==interest), None)
 
                 success = edit_application_by_id(
