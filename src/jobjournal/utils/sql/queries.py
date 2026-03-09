@@ -1,12 +1,10 @@
 import sqlite3 
 import logging
-import random
 
-import numpy as np
 import pandas as pd
 import streamlit as st
 
-from datetime import date, datetime, timedelta
+from datetime import date
 
 today = date.today()
 

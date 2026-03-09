@@ -17,7 +17,7 @@ from src.jobjournal.utils.templ.mappings import status_map, status_map_customiza
 
 status_map_r = {v: k for k, v in status_map.items()}
 
-from datetime import date, datetime
+from datetime import date
 
 today = date.today()
 
