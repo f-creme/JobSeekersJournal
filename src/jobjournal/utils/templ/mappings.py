@@ -1,15 +1,15 @@
 status_map = {
-    0: "A traiter",
-    1: "Candidature en préparation",
-    2: "Candidature prête pour envoie",
-    3: "Candidature envoyée",
-    4: "Echanges en cours",
-    5: "Entretien à venir",
-    6: "Attente de décision recruteur",
-    7: "Attente de ma décision",
-    8: "Acceptée", 
-    9: "Refus recruteur",
-    10: "Refus personnel"
+    0: "data.status.0",
+    1: "data.status.1",
+    2: "data.status.2",
+    3: "data.status.3",
+    4: "data.status.4",
+    5: "data.status.5",
+    6: "data.status.6",
+    7: "data.status.7",
+    8: "data.status.8", 
+    9: "data.status.9",
+    10: "data.status.10"
 }
 
 status_map_customization = {
@@ -24,6 +24,11 @@ status_map_customization = {
     8: {"color": "gray", "icon": "✅"}, 
     9: {"color": "gray", "icon": "⛔"},
     10: {"color": "gray", "icon": "🛑"}
+}
+
+pre_application_status_map = {
+    -2: "data.status.-2",
+    -1: "data.status.-1"
 }
 
 interest_map = {

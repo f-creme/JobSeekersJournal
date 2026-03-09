@@ -10,6 +10,7 @@ import folium
 from streamlit_folium import st_folium
 from folium.plugins import MarkerCluster
 
+from src.jobjournal.utils.i18n.loader import t
 from src.jobjournal.utils.sql.queries import applications_stats_overview, applications_places_overview
 from src.jobjournal.utils.sql.var import PlacesTable, PositionsTable
 from src.jobjournal.utils.templ.mappings import status_map, status_map_customization, interest_map
@@ -21,23 +22,23 @@ from datetime import date, datetime
 today = date.today()
 
 def overview() -> None:
-    st.markdown("# Vue d'ensemble")
-    st.markdown("Suivez l'avancée de votre recherche d'emploi.")
+    st.markdown(f"# {t("page.overview.title")}")
+    st.markdown(t("page.overview.caption"))
     st.markdown("---")
     
     data = applications_stats_overview(db_path=st.session_state.db_path)
     
     if data:
         col1, col2 = st.columns(2)
-        col1.metric("Offres enregistrées", value=data["overall_records"], border=True)
+        col1.metric(t("page.overview.metrics.total-records"), value=data["overall_records"], border=True)
         col1.metric(
-            "Offres enregistrées (cette semaine)", border=True, value=data["current_week_records"],
-            delta=f"{data['current_week_records'] - data['last_week_records']} par rapport à la semaine précédente"
+            t("page.overview.metrics.weekly-records.title"), border=True, value=data["current_week_records"],
+            delta=f"{data['current_week_records'] - data['last_week_records']} {t('page.overview.metrics.weekly-records.caption')}"
         )
-        col2.metric("Candidatures envoyées", value=data["overall_app"], border=True)
+        col2.metric(t("page.overview.metrics.total-applications"), value=data["overall_app"], border=True)
         col2.metric(
-            "Candiature envoyées (cette semaine)", border=True, value=data["current_week_app"], 
-            delta=f"{data['current_week_app'] - data['last_week_app']} par rapport à la semaine précédente"
+            t("page.overview.metrics.weekly-applications.title"), border=True, value=data["current_week_app"], 
+            delta=f"{data['current_week_app'] - data['last_week_app']} {t('page.overview.metrics.weekly-applications.caption')}"
         )
 
         status_d_df = pd.DataFrame().from_dict(data["status_distribution"], orient="index", columns=["count"]).reset_index(names="status")
@@ -45,21 +46,21 @@ def overview() -> None:
 
         fig = px.bar(
             status_d_df.sort_values("num_status", ascending=True), x="status", y="count", color="num_status",
-            labels={"status": "Statut de candidature", "count": "Nombre de candidatures", "num_status": "Avancement"},
+            labels={"status": t("page.overview.status-graph.xlabel"), "count": t("page.overview.status-graph.ylabel"), "num_status": t("page.overview.status-graph.hue")},
             color_continuous_scale="Tealgrn"
         )
         fig.update_layout(
             coloraxis_showscale=False
         )
 
-        st.markdown("### Répartition des candidatures par statut")
+        st.markdown(f"### {t('page.overview.status-graph.title')}")
         with st.container(border=True):
             st.plotly_chart(fig, width="stretch")
 
     map_data = applications_places_overview(db_path=st.session_state.db_path)
 
     if map_data:
-        st.markdown("### Répartition géographique des candidatures")
+        st.markdown(f'### {t("page.overview.map.title")}')
         with st.container(width="stretch", border=True):
             col_map, col_info = st.columns([2, 1], vertical_alignment="center")
 
@@ -100,18 +101,15 @@ def overview() -> None:
                     status_str = status_map[status_num]
                     color, icon = status_map_customization[status_num]["color"], status_map_customization[status_num]["icon"]
 
-                    st.markdown("#### Job sélectionné")
-                    st.markdown(f"* **Poste**: {selected_data[PositionsTable.title]}")                    
-                    st.markdown(f"* **Entreprise**: {selected_data[PositionsTable.comp]}")
-                    st.markdown(f"* **Lieu**: {selected_data[PositionsTable.loc]}")
+                    st.markdown(f"#### {t('page.overview.map.info.caption')}")
+                    st.markdown(f"* **{t('page.overview.map.info.job')}**: {selected_data[PositionsTable.title]}")                    
+                    st.markdown(f"* **{t('page.overview.map.info.company')}**: {selected_data[PositionsTable.comp]}")
+                    st.markdown(f"* **{t('page.overview.map.info.location')}**: {selected_data[PositionsTable.loc]}")
                     st.markdown(
-                        f":{color}-badge[{icon} {status_str}] :yellow-badge[{interest_map[selected_data[PositionsTable.interest]]}]"
+                        f":{color}-badge[{icon} {t(status_str)}] :yellow-badge[{interest_map[selected_data[PositionsTable.interest]]}]"
                     )                 
 
     if not map_data and not data:
-        st.info(
-            "Aucune candidature n'est enregistrée dans la base de données. " \
-            "Enregistrez une première candidature sur la page **Ajouter une offre**."
-        )
+        st.info(t("error.empty-database"))
 
     return None
