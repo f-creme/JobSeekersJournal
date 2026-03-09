@@ -34,7 +34,7 @@ def week_category(date):
 def extract_record_week_category(timeline_json):
     timeline_dict = json.loads(timeline_json)
     for entry in timeline_dict.values():
-        if entry.get("headline") == "Enregistrement":
+        if entry.get("headline") == "data.status.-1":
             return week_category(entry["date"])
     return None
 
