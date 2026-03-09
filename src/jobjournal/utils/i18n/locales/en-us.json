@@ -1,17 +1,228 @@
 {
     "app": {
-        "title": "# Job Seeker's Journal (en)"
+        "title": "# Job Seeker's Journal"
     },
-
     "nav": {
         "title": "## Main Menu",
         "page-selector": "Select a page",
-
         "pages": {
-            "overview": "Overview", 
-            "applications": "Ma applications",
+            "overview": "Overview",
+            "applications": "My applications",
             "add_position": "Add a job offer",
-            "update_position": "Update a job offer"
+            "update_position": "Edit a job offer"
+        }
+    },
+    "filter": {
+        "offer-selector": {
+            "label": "Select an offer",
+            "all-option": "All"
+        },
+        "offers-sorter": {
+            "label": "Sorting options",
+            "options": {
+                "default": "Default sort",
+                "pub-date": "Publication date",
+                "status": "Application Status",
+                "interest": "Interest"
+            }
+        },
+        "sorting-options": {
+            "label": "Ascending or descending",
+            "asc": "Ascending",
+            "desc": "Descending"
+        }
+    },
+    "form": {
+        "fields": {
+            "position": {
+                "title": {
+                    "label": "Job Title"
+                },
+                "company": {
+                    "label": "Business"
+                },
+                "source": {
+                    "label": "Source"
+                },
+                "location": {
+                    "label": "Location",
+                    "help": "Multiple locations or sites separated by commas\n\n**Example**: `Paris`, `Paris (FR), Brussels (BE)`, `Londond, Heidelberg`"
+                },
+                "pub-date": {
+                    "label": "Publication date"
+                },
+                "salary": {
+                    "label": "Annual gross salary (€)",
+                    "help": "If the salary is not known, leave 0 or enter the expected salary."
+                },
+                "status": {
+                    "label": "Status",
+                    "help": "Select a progress status of the application among those proposed"
+                },
+                "interest": {
+                    "label": "Interest",
+                    "help": "Rate the interest in this offer between 0 and 5"
+                },
+                "details": {
+                    "label": "Details",
+                    "help": "Fill in all the information relating to the offer here.\n\nThis field supports the [Markdown](https://www.markdownguide.org/basic-syntax) syntax"
+                },
+                "motivations": {
+                    "label": "Motives",
+                    "help": "Please provide all your motivations for this position here.\n\nThis field supports the [Markdown](https://www.markdownguide.org/basic-syntax) syntax"
+                },
+                "skills": {
+                    "skill-label": "Skill no. ",
+                    "proof-label": "Comment no. "
+                }
+            }
+        },
+        "expander": {
+            "skills": {
+                "label": "Key skills for the position",
+                "caption": "List here up to 5 key skills for the position, indicating for each whether it is ✅ mastered or ❌ not, and indicating one or more experiences to attest to this.",
+                "info": "These fields support the [Markdown](https://www.markdownguide.org/basic-syntax) syntax"
+            },
+            "timeline": {
+                "label": "Timeline associated with the offer",
+                "caption": "Edit application timeline here",
+                "info": "💡​ `Details` fields support [Markdown](https://www.markdownguide.org/basic-syntax) syntax",
+                "warning": "⚠️ Please do not modify the titles of events n°1 and 2, otherwise the statistics will be distorted in the **Overview** tab.",
+                "field": {
+                    "date": "Date of event no. ",
+                    "title": "Title of event no. ",
+                    "content": "Details of event no. "
+                }
+            }
+        },
+        "button": {
+            "add-position": {
+                "label": "Add the offer to the database"
+            },
+            "update-position": {
+                "label": "Edit offer details"
+            }
+        }
+    },
+    "page": {
+        "overview": {
+            "title": "Overview",
+            "caption": "Track the progress of your job search.",
+            "metrics": {
+                "total-records": "Saved offers",
+                "total-applications": "Applications sent",
+                "weekly-records": {
+                    "title": "Offers recorded this week",
+                    "caption": "compared to last week"
+                },
+                "weekly-applications": {
+                    "title": "Applications sent this week",
+                    "caption": "compared to last week"
+                }
+            },
+            "status-graph": {
+                "title": "Distribution of applications by status",
+                "ylabel": "Number of applications",
+                "xlabel": "Application status",
+                "hue": "Digital Status"
+            },
+            "map": {
+                "title": "Geographical distribution of applications",
+                "info": {
+                    "caption": "Selected position",
+                    "job": "Job",
+                    "company": "Business",
+                    "location": "Place"
+                }
+            }
+        },
+        "applications": {
+            "title": "My applications",
+            "summary": {
+                "date1": "There is ",
+                "date2": " days",
+                "salary-unit": "gross €/year"
+            },
+            "deletion": {
+                "expander": "Remove offer from database",
+                "confirm": "Confirm deletion"
+            },
+            "tabs": {
+                "details": {
+                    "title": "Offer details"
+                },
+                "motivations": {
+                    "title": "Motivations for this position"
+                },
+                "skills": {
+                    "title": "Targeted skills",
+                    "caption": "Key skills required for the role",
+                    "table": {
+                        "skill": "Skill",
+                        "experience": "Related experience"
+                    }
+                },
+                "timeline": {
+                    "title": "Chronology",
+                    "expander": {
+                        "label": "Add an event to the timeline",
+                        "info": "💡 Enter the event title or choose one of the events from the list below to benefit from advanced statistics in the **Overview** tab.",
+                        "fields": {
+                            "date": "Event date",
+                            "name": "Event name",
+                            "details": "Details"
+                        },
+                        "button": {
+                            "label": "Add to timeline"
+                        }
+                    }
+                }
+            }
+        },
+        "new-position": {
+            "title": "Add a job offer"
+        },
+        "update-position": {
+            "title": "Edit a job offer"
+        }
+    },
+    "data": {
+        "status": {
+            "-2": "Publication",
+            "-1": "Registration",
+            "0": "To be treated",
+            "1": "Application in preparation",
+            "2": "Application ready to send",
+            "3": "Application sent",
+            "4": "Current exchanges",
+            "5": "Upcoming interview",
+            "6": "Waiting for a recruiter decision",
+            "7": "Personal reflection in progress",
+            "8": "Offer accepted",
+            "9": "Recruiter's refusal",
+            "10": "Personal refusal"
+        }
+    },
+    "error": {
+        "missing-applications-data": "An error occurred while retrieving applications.",
+        "empty-database": "No applications are recorded in the database.\n\nRegister a first application on the **Add an offer** page."
+    },
+    "message": {
+        "new-position": {
+            "success": "✅ Offer added to the database!",
+            "failure": "❌ An error occurred while adding the offer to the database."
+        },
+        "update-position": {
+            "success": "✅ Offer details modified in the database!",
+            "failure": "❌ An error occurred while editing the offer in the database."
+        },
+        "offer-deletion": {
+            "success": "✅ Application successfully deleted.",
+            "failure": "❌ An error occurred deleting the application."
+        },
+        "timeline-update": {
+            "success": "✅ Timeline successfully edited!\n\nReload the page to see the changes.",
+            "failure": "❌ An error occurred editing the application."
         }
     }
 }
