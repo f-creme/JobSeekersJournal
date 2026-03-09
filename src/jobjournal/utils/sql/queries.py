@@ -10,6 +10,8 @@ from datetime import date, datetime, timedelta
 
 today = date.today()
 
+from src.jobjournal.utils.i18n.loader import t
+
 from src.jobjournal.utils.sql.var import (PositionsTable as pt, PlacesTable as placest, JoinTable1 as j1)
 from src.jobjournal.utils.sql.var import ContactsTable as ct
 
@@ -377,7 +379,6 @@ def applications_stats_overview(db_path: str) -> dict:
         return False
     
     df = pd.DataFrame(data, columns=["timeline", "status_num"])
-    df["status_str"] = df["status_num"].apply(lambda x: status_map[x])
     df["application_sent"] = df["status_num"].apply(lambda x: x >= 3)
     df["record_week"] = df["timeline"].apply(extract_record_week_category)
     df["application_week"] = df["timeline"].apply(extract_application_week_category)
@@ -417,7 +418,7 @@ def applications_stats_overview(db_path: str) -> dict:
         "overall_app": overall_app,
         "current_week_app": current_week_app,
         "last_week_app": last_week_app,
-        "status_distribution": df["status_str"].value_counts().to_dict()        
+        "status_distribution": df["status_num"].value_counts().to_dict()        
     }
 
     return processed_data

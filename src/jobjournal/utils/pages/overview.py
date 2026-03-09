@@ -41,8 +41,8 @@ def overview() -> None:
             delta=f"{data['current_week_app'] - data['last_week_app']} {t('page.overview.metrics.weekly-applications.caption')}"
         )
 
-        status_d_df = pd.DataFrame().from_dict(data["status_distribution"], orient="index", columns=["count"]).reset_index(names="status")
-        status_d_df["num_status"] = status_d_df["status"].apply(lambda x: status_map_r[x])
+        status_d_df = pd.DataFrame().from_dict(data["status_distribution"], orient="index", columns=["count"]).reset_index(names="num_status")
+        status_d_df["status"] = status_d_df["num_status"].apply(lambda x: t(status_map[x]))
 
         fig = px.bar(
             status_d_df.sort_values("num_status", ascending=True), x="status", y="count", color="num_status",
