@@ -95,7 +95,13 @@ Once the container is running, open your browser and go to: http://localhost:850
 To run the app without Docker:
 
 ```bash
+# Recreate the environment from the pyproject.toml
 uv sync
+
+# Create a `data` folder to store data
+mkdir data
+
+# Launch the app
 uv run streamlit run entrypoint.py
 ```
 
