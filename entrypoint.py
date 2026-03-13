@@ -47,15 +47,22 @@ if __name__=="__main__":
         st.session_state.nominatim = os.environ["NOMINATIM_USER_AGENT"]
     else:
         st.markdown("# Job Seeker's Journal")
-        st.error("⚠️ La variable d'environnement NOMINATIM_USER_AGENT n'existe pas.")
+        st.error("⚠️ The environment variable NOMINATIM_USER_AGENT does not exist.")
         st.markdown(
-            "Pour utiliser l'application, définir l'emplacement de la base de données " \
-            "dans la variable d'environnement NOMINATIM_USER_AGENT, puis relancer l'application."
+            "To use the app, set a user agent name for the Nominatim search engine " \
+            "in the NOMINATIM_USER_AGENT environment variable, then restart the application."
         )
 
+        st.markdown("* **Using Docker:**")
         st.code(
-            '$ export NOMINATIM_USER_AGENT="jsj/0.1 (+your-email@domain.com)"\n' \
-            "$ pdm run streamlit run entrypoint.py", 
+            'export NOMINATIM_USER_AGENT="jsj/0.1 (+your-email@domain.com)"\n' \
+            'docker run -p 8501:8501 -v path/local/data:/app/data -e NOMINATIM_USER_AGENT="$NOMINATIM_USER_AGENT" jobseekersjournal_image jobseekersjournal',
+            language="bash"
+        )
+        st.markdown("* **or after a manual installation:**")
+        st.code(
+            'export NOMINATIM_USER_AGENT="jsj/0.1 (+your-email@domain.com)"\n' \
+            "uv run streamlit run entrypoint.py", 
             language="bash"
         )
 
