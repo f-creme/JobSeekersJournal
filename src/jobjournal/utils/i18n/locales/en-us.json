@@ -39,7 +39,7 @@
                     "label": "Job Title"
                 },
                 "company": {
-                    "label": "Business"
+                    "label": "Company"
                 },
                 "source": {
                     "label": "Source"
@@ -52,7 +52,7 @@
                     "label": "Publication date"
                 },
                 "salary": {
-                    "label": "Annual gross salary (€)",
+                    "label": "Annual gross salary ($)",
                     "help": "If the salary is not known, leave 0 or enter the expected salary."
                 },
                 "status": {
