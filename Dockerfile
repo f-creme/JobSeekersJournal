@@ -14,8 +14,10 @@ RUN apt-get update && \
 # Define working directory
 WORKDIR /app
 
-# Clone repo
-RUN git clone https://github.com/f-creme/JobSeekersJournal.git . 
+# Copy code
+COPY src/ /app/src
+COPY entrypoint.py /app/
+COPY pyproject.toml /app/
 
 # Install dependencies
 RUN uv sync
